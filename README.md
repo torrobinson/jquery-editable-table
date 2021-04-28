@@ -10,7 +10,7 @@ https://jsfiddle.net/torrobinson/63z182vL/
 | index              | int                         | The index of the column in the physical table                                                                                                        |
 | name               | name                        | The name of the attribute bound to this column                                                                                                       |
 | classes            | array                       | An array of CSS classes to assign to this column's cells                                                                                             |
-| convertOut         | function(intervalValue)     | A function to take an internal value (most likely a string) to format or cast it when the value is being extracted with `getData()`                  |
+| convertOut         | function(internalValue)     | A function to take an internal value (most likely a string) to format or cast it when the value is being extracted with `getData()`                  |
 | isValid            | function(newValue, allData) | A function to validate a new valid being added. Function provides all table data to compare against.                                                 |
 | afterChange        | function(newValue, cell)    | A function that is executed after a cell value is changed (and validated). It provides the new value, as well as the physical table cell holding it. |
 | removeRowIfCleared | bool                        | If true, when this cell value is cleared for a row, the entire row will be removed.                                                                  |
