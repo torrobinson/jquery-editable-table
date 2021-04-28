@@ -15,6 +15,15 @@ https://jsfiddle.net/torrobinson/63z182vL/
 | afterChange        | function(newValue, cell)    | A function that is executed after a cell value is changed (and validated). It provides the new value, as well as the physical table cell holding it. |
 | removeRowIfCleared | bool                        | If true, when this cell value is cleared for a row, the entire row will be removed.                                                                  |
 
+
+# Functions
+| Function | Parameters   | Description                                           |
+|----------|--------------|-------------------------------------------------------|
+| getData  | ()           | Returns all table data (array)                        |
+| setData  | (data array) | Accepts data (array) and sets the table to this state |
+| addRow   | (newRow)     | Accepts an object and adds to the end of table data   |
+| clear    | ()           | Clears all data from the table                        |
+
 # Example...
 ```html
  <table id="sample-table">
