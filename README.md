@@ -54,7 +54,7 @@ $('#sample-table').editableTable({
         },
         // Example of a number that is validated as an int
         {
-            index: 2,
+            index: 1,
             name: 'number',
             classes: ['text-end'],
             isValid: (val) => {
