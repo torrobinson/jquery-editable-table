@@ -1,5 +1,5 @@
 # jquery-editable-table
-A small jQuery extension too turn an HTML table editable for fast data entry and validation
+A small jQuery extension to turn an HTML table editable for fast data entry and validation
 
 # Demo
 https://jsfiddle.net/torrobinson/63z182vL/
