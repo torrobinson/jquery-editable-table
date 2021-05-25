@@ -2,7 +2,7 @@
 A small jQuery extension to turn an HTML table editable for fast data entry and validation
 
 # Demo
-https://jsfiddle.net/torrobinson/63z182vL/
+👉 https://jsfiddle.net/torrobinson/63z182vL/ 👈
 
 # Config (column definitions)
 | Option             | Type                        | Description                                                                                                                                          |
