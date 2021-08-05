@@ -8,6 +8,7 @@ A small jQuery extension to turn an HTML table editable for fast data entry and 
 | Option             | Type                        | Description                                                                                                                                          |
 |--------------------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | index              | int                         | The index of the column in the physical table                                                                                                        |
+| isHidden              | bool                         | Whether or not to hide the column from being seen/edited                                                                                                       |
 | name               | name                        | The name of the attribute bound to this column                                                                                                       |
 | classes            | array                       | An array of CSS classes to assign to this column's cells                                                                                             |
 | convertOut         | function(internalValue)     | A function to take an internal value (most likely a string) to format or cast it when the value is being extracted with `getData()`                  |
