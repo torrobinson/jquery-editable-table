@@ -33,6 +33,13 @@ $.fn.editableTable = function (options) {
 
     // The table element
     let element = $(this);
+    
+    // Show all columns and then hide any hidden ones
+    element.find('th').show();
+    options.columns.forEach((col, i)=>{
+    	if(col.isHidden !== undefined && col.isHidden) element.find('th').eq(i).hide();
+    });
+    
 
     // The textbox allowing user input. Only add if there's not already an editor input control around
     let editor;
@@ -271,14 +278,21 @@ $.fn.editableTable = function (options) {
                         newCell = $(`<td>${colToAdd.value}</td>`);
                     else
                         newCell = $(`<td data-is-null></td>`);
-
+                        
+                   	// Apply any classes
                     if (colToAdd.def.classes !== undefined && colToAdd.def.classes.length) {
                         colToAdd.def.classes.forEach(classToAdd => newCell.addClass(classToAdd));
                     }
 
+										// Apply any style
                     if (colToAdd.def.style !== undefined && colToAdd.def.style.length) {
                         newCell.attr("style", newCell.attr("style") + "; " + colToAdd.def.style);
                     }
+                    
+                    // Hide if hidden
+                    if (colToAdd.def.isHidden !== undefined && colToAdd.def.isHidden) {
+                        newCell.hide()
+;                    }
 
                     // Trigger any events
                     let columnDef = options.columns.filter(col => col.name === colToAdd.prop)[0];
