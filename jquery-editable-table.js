@@ -291,17 +291,17 @@ $.fn.editableTable = function (options) {
                     
                     // Hide if hidden
                     if (colToAdd.def.isHidden !== undefined && colToAdd.def.isHidden) {
-                        newCell.hide()
-;                    }
+                        newCell.hide();
+		            }
+			
+		            // Add to the column
+                    newRow.append(newCell);
 
                     // Trigger any events
                     let columnDef = options.columns.filter(col => col.name === colToAdd.prop)[0];
                     if (typeof columnDef.afterAdd == 'function') {
                         columnDef.afterAdd(colToAdd.value, newCell);
                     }
-
-                    // Add to the column
-                    newRow.append(newCell);
                 });
 
             }
