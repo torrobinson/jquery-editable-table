@@ -152,7 +152,6 @@ $.fn.editableTable = function(options) {
 
     // On table clicking, move around cells
     element.on('click keypress dblclick', showEditor)
-        .css('cursor', 'pointer')
         .keydown(function(e) {
             let prevent = true,
                 possibleMove = handleMovement($(e.target), e.which);
@@ -172,7 +171,11 @@ $.fn.editableTable = function(options) {
             }
         });
 
-    element.find('td').not('.no-editor').prop('tabindex', 1);
+    element
+        .find('td')
+        .not('.no-editor')
+        .prop('tabindex', 1)
+        .css('cursor', 'pointer');
 
     $(window).on('resize', function() {
         if (editor.is(':visible')) {
@@ -252,6 +255,84 @@ $.fn.editableTable = function(options) {
             return rowData;
         },
 
+        addHeaders: function() {
+            let newRow = $(`<tr></tr>`);
+            options.columns.sort((a, b) => a.order - b.order).forEach((columnDef, index) => {
+                let newCell;
+                if (columnDef.header !== null) newCell = $(`<th>${columnDef.header}</th>`);
+                else newCell = $(`<th data-is-null></th>`);
+
+                // Apply any classes
+                if (columnDef.headerClasses !== undefined && columnDef.headerClasses.length) {
+                    columnDef.headerClasses.forEach(classToAdd => newCell.addClass(classToAdd));
+                }
+
+                // Apply any style
+                if (columnDef.headerStyle !== undefined && columnDef.headerStyle.length) {
+                    newCell.attr("style", newCell.attr("style") + "; " + columnDef.headerStyle);
+                }
+
+                // Hide if hidden
+                if (columnDef.isHidden !== undefined && columnDef.isHidden) {
+                    newCell.hide();
+                }
+
+                // Trigger any events
+                if (typeof columnDef.afterHeaderCellAdd == 'function') {
+                    columnDef.afterHeaderCellAdd(columnDef.value, newCell);
+                }
+
+                // Add to the column
+                newRow.append(newCell);
+            });
+
+            // Add the new row
+            let lastRow = element.find('thead tr:last');
+            if (lastRow.length > 0) lastRow.after(newRow);
+            else element.find('thead').append(newRow);
+
+            refresh();
+        },
+
+        addFooters: function() {
+            let newRow = $(`<tr></tr>`);
+            options.columns.sort((a, b) => a.order - b.order).forEach((columnDef, index) => {
+                let newCell;
+                if (columnDef.footer !== null) newCell = $(`<td>${columnDef.footer}</td>`);
+                else newCell = $(`<td data-is-null></td>`);
+
+                // Apply any classes
+                if (columnDef.footerClasses !== undefined && columnDef.footerClasses.length) {
+                    columnDef.footerClasses.forEach(classToAdd => newCell.addClass(classToAdd));
+                }
+
+                // Apply any style
+                if (columnDef.footerStyle !== undefined && columnDef.footerStyle.length) {
+                    newCell.attr("style", newCell.attr("style") + "; " + columnDef.footerStyle);
+                }
+
+                // Hide if hidden
+                if (columnDef.isHidden !== undefined && columnDef.isHidden) {
+                    newCell.hide();
+                }
+
+                // Trigger any events
+                if (typeof columnDef.afterFooterCellAdd == 'function') {
+                    columnDef.afterFooterCellAdd(columnDef.value, newCell);
+                }
+
+                // Add to the column
+                newRow.append(newCell);
+            });
+
+            // Add the new row
+            let lastRow = element.find('tfoot tr:last');
+            if (lastRow.length > 0) lastRow.after(newRow);
+            else element.find('tfoot').append(newRow);
+
+            refresh();
+        },
+
         // Add a new row with JSON
         addRow: function(row) {
             let newRow = $(`<tr></tr>`);
@@ -326,13 +407,18 @@ $.fn.editableTable = function(options) {
 
         // Set the table's data with JSON
         setData: function(data, afterLoad) {
+            this.addHeaders();
             if (data) {
                 this.clear();
                 data.forEach(entry => {
                     this.addRow(entry);
                 });
-                if (typeof afterLoad == 'function') afterLoad();
             }
+            this.addFooters();
+
+            setTimeout(function() {
+                if (typeof afterLoad == 'function') afterLoad();
+            });
         }
 
     };
