@@ -228,7 +228,9 @@ $.fn.editableTable = function (options) {
                 let newRow = {};
 
                 $(row).find('td').toArray().forEach(col => {
-                    let columnsDef = options.columns[$(col).index()];
+                    let columnsDef = options.columns[
+                        $(col).parent().children('td').index($(col)) // only index at cells, or "td"s
+                    ];
 
                     let value = $(col).text();
 
