@@ -191,7 +191,7 @@ $.fn.editableTable = function (options) {
 
     // Validate based on options
     $('table td').on('validate', function (evt, newValue) {
-        let currentColIndex = $(evt.currentTarget).index();
+        let currentColIndex = $(evt.currentTarget).parent().children('td').index($(evt.currentTarget));
         let columnDef = options.columns[currentColIndex];
         let currentData = _instance.getData({ convert: false }); // current data to allow user to validate based on existing data
         let isValid = columnDef.isValid && columnDef.isValid(newValue, currentData);
@@ -200,7 +200,7 @@ $.fn.editableTable = function (options) {
 
     $('table td').on('change', function (evt, newValue) {
         let td = $(this);
-        let currentColIndex = $(evt.currentTarget).index();
+        let currentColIndex = $(evt.currentTarget).parent().children('td').index($(evt.currentTarget));
         let columnDef = options.columns[currentColIndex];
 
         if (columnDef.removeRowIfCleared && newValue == '') {
