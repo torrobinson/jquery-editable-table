@@ -65,7 +65,11 @@ $.fn.editableTable = function (options) {
         // Set the active cell
         activeCell = element.find('td:focus');
         if (activeCell.length) {
-            // Prepare
+            // Get column def
+            let currentColIndex = $(activeCell).parent().children('td').index($(activeCell));
+            let columnDef = options.columns[currentColIndex];
+
+            // Prepare input control
             editor.val(activeCell.text())							// Throw the value in
                 .removeClass(errorClass)							// remove any error classes
                 .show()												// show it
@@ -73,7 +77,12 @@ $.fn.editableTable = function (options) {
                 .css(activeCell.css(options.cloneProperties))		// make it look similar by cloning properties
                 .width(activeCell.width())							// size it
                 .height(activeCell.height())						// size it
-                .focus();											// focu user input into it
+                .focus();											// focus user input into it
+
+            // Set max length, if it's specified
+            if (columnDef.maxLength !== undefined) editor.attr('maxlength', columnDef.maxLength);
+            else editor.removeAttr('maxlength');
+
             if (select) {
                 editor.select();
             }
