@@ -40,6 +40,14 @@ $.fn.editableTable = function (options) {
         if (col.isHidden !== undefined && col.isHidden) element.find('th').eq(i).hide();
     });
 
+    // If there are actions, add a final blank table header
+    if (options.actions !== undefined && options.actions.length > 0) {
+        // Add header if we don't already have one
+        if (!element.find('thead tr th[actions]').length) {
+            element.find('thead tr').append($('<th actions></th>'));
+        }
+    }
+
 
     // The textbox allowing user input. Only add if there's not already an editor input control around
     let editor;
@@ -63,7 +71,7 @@ $.fn.editableTable = function (options) {
     // Function to show the editor
     function showEditor(select) {
         // Set the active cell
-        activeCell = element.find('td:focus');
+        activeCell = element.find('td:focus:not([action])');
         if (activeCell.length) {
             // Get column def
             let currentColIndex = $(activeCell).parent().children('td').index($(activeCell));
@@ -163,26 +171,25 @@ $.fn.editableTable = function (options) {
     });
 
     // On table clicking, move around cells
-    element.on('click keypress dblclick', showEditor)
-        .css('cursor', 'pointer')
-        .keydown(function (e) {
-            let prevent = true,
-                possibleMove = handleMovement($(e.target), e.which);
-            if (possibleMove.length > 0) {
-                possibleMove.focus();
-            } else if (e.which === ENTER) {
-                showEditor(false);
-            } else if (e.which === CONTROL || e.which === LEFT_WINDOWS || e.which === SELECT_KEY) {
-                showEditor(true);
-                prevent = false;
-            } else {
-                prevent = false;
-            }
-            if (prevent) {
-                e.stopPropagation();
-                e.preventDefault();
-            }
-        });
+    element.on('click keypress dblclick', showEditor);
+    element.keydown(function (e) {
+        let prevent = true,
+            possibleMove = handleMovement($(e.target), e.which);
+        if (possibleMove.length > 0) {
+            possibleMove.focus();
+        } else if (e.which === ENTER) {
+            showEditor(false);
+        } else if (e.which === CONTROL || e.which === LEFT_WINDOWS || e.which === SELECT_KEY) {
+            showEditor(true);
+            prevent = false;
+        } else {
+            prevent = false;
+        }
+        if (prevent) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    });
 
     element.find('td').prop('tabindex', 1);
 
@@ -236,7 +243,7 @@ $.fn.editableTable = function (options) {
             element.find('tbody tr').toArray().forEach(row => {
                 let newRow = {};
 
-                $(row).find('td').toArray().forEach(col => {
+                $(row).find('td:not([action])').toArray().forEach(col => {
                     let columnsDef = options.columns[
                         $(col).parent().children('td').index($(col)) // only index at cells, or "td"s
                     ];
@@ -321,6 +328,18 @@ $.fn.editableTable = function (options) {
                 activeOptions.columns.forEach(x => {
                     newRow.append(`<td></td>`);
                 });
+            }
+
+            // Add actions if any
+            if (options.actions !== undefined && options.actions.length > 0) {
+                let actionsCell = $(`<td action></td>`);
+                options.actions.forEach(a => {
+                    let actionElement = $(a.label);
+                    actionElement.css('cursor', 'pointer');
+                    actionElement.click(e => a.action(e, newRow))
+                    actionsCell.append(actionElement);
+                });
+                newRow.append(actionsCell);
             }
 
             // Add the new row

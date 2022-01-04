@@ -3,8 +3,19 @@ A small jQuery extension to turn an HTML table editable for fast data entry and 
 
 # Demo
 👉 https://jsfiddle.net/torrobinson/63z182vL/ 👈
+<br/><br/>
+---
+<br/><br/>
 
-# Config (column definitions)
+# Config
+```
+{
+ columns: [], // required
+ actions: []  // optional
+}
+```
+
+## columns
 | Option             | Type                        | Description                                                                                                                                          |
 |--------------------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | index              | int                         | The index of the column in the physical table                                                                                                        |
@@ -17,6 +28,14 @@ A small jQuery extension to turn an HTML table editable for fast data entry and 
 | afterChange        | function(newValue, cell)    | A function that is executed after a cell value is changed (and validated). It provides the new value, as well as the physical table cell holding it. |
 | removeRowIfCleared | bool                        | If true, when this cell value is cleared for a row, the entire row will be removed.                                                                  |
 
+## actions
+| Option             | Type                        | Description                                                                                                                                          |
+|--------------------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| label              | string                         | HTML for the button or icon for this action                                                                                                |
+| action              | function(clickEventArgs, row)         | The action to perform when the button/icon is clicked                                                             
+
+---
+<br/><br/>
 
 # Functions
 | Function | Parameters   | Description                                           |
@@ -64,6 +83,15 @@ $('#sample-table').editableTable({
                 return !isNaN(val) && Number.isInteger(val);
             }
         }
+    ],
+    actions: [
+    	{
+      	label: '<button>Delete</button>',
+        action: (e, row) => {
+        	 // Remove the row from the table
+          row.remove();
+        }
+      },
     ]
 });
 ```
