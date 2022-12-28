@@ -44,7 +44,7 @@ $.fn.editableTable = function (options) {
     if (options.actions !== undefined && options.actions.length > 0) {
         // Add header if we don't already have one
         if (!element.find('thead tr th[actions]').length) {
-            element.find('thead tr').append($('<th actions></th>'));
+            element.find('thead tr').append($('<th actions=""></th>'));
         }
     }
 
